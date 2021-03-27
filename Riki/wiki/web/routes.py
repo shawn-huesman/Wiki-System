@@ -2,6 +2,7 @@
     Routes
     ~~~~~~
 """
+
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -12,7 +13,10 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from werkzeug.security import safe_join
+from werkzeug.utils import secure_filename
 
+# from Riki import app
 from wiki.core import Processor
 from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
@@ -21,7 +25,6 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-
 
 bp = Blueprint('wiki', __name__)
 
@@ -170,6 +173,28 @@ def user_delete(user_id):
     pass
 
 
+# Endpoint called when visiting the tab 'Upload File'
+# which later renders the 'upload.html' template.
+@bp.route('/upload/')
+def upload():
+    return render_template('upload.html')
+
+
+# Endpoint called after submitting a file to upload
+# it creates a path and filename and saves it to the folder
+# defined in app.config['UPLOAD_FOLDER'] in the init file.
+# then shows a message and redirects to /upload.
+@bp.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['file']
+        from Riki import app
+        path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
+        f.save( path_and_filename )
+        flash('File successfully uploaded')
+        return redirect('/upload')
+
+
 """
     Error Handlers
     ~~~~~~~~~~~~~~
@@ -179,4 +204,3 @@ def user_delete(user_id):
 @bp.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
-
