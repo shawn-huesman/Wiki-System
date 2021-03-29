@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-
+import os.path
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -186,10 +186,18 @@ def upload():
 # then shows a message and redirects to /upload.
 @bp.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
+    dupl_counter = 0  # Variable to store count of files with the same name and append it to new uploaded file.
     if request.method == 'POST':
         f = request.files['file']
         from Riki import app
         path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
+
+        while os.path.exists(path_and_filename):
+            dupl_counter += 1
+            txt_append = " (" + str(dupl_counter) + ")"
+            path_and_filename += txt_append
+
+        dupl_counter = 0
         f.save( path_and_filename )
         flash('File successfully uploaded')
         return redirect('/upload')
