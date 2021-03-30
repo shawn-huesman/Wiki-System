@@ -191,16 +191,17 @@ def upload_file():
         f = request.files['file']
         from Riki import app
         path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
+        original_name = path_and_filename
 
-        while os.path.exists(path_and_filename):
+        while os.path.exists( path_and_filename ):
             dupl_counter += 1
             txt_append = " (" + str(dupl_counter) + ")"
-            path_and_filename += txt_append
+            path_and_filename = original_name + txt_append
 
         dupl_counter = 0
         f.save( path_and_filename )
-        flash('File successfully uploaded')
-        return redirect('/upload')
+        flash( 'File successfully uploaded' )
+        return redirect( '/upload' )
 
 
 """
