@@ -5,6 +5,7 @@ from flask import Flask
 from flask import g
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
+from pathlib import Path
 
 from wiki.core import Wiki
 from wiki.web.user import UserManager
@@ -34,10 +35,13 @@ def create_app(directory):
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
 
+    '''
     if os.name == 'nt':
         app.config['UPLOAD_FOLDER'] = '.\\uploads'
     else:
         app.config['UPLOAD_FOLDER'] = './uploads'
+    '''
+    app.config['UPLOAD_FOLDER'] = Path( "./uploads" )
 
     try:
         app.config.from_pyfile(
