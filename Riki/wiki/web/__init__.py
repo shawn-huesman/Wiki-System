@@ -33,7 +33,12 @@ def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
-    app.config['UPLOAD_FOLDER'] = './uploads'
+
+    if os.name == 'nt':
+        app.config['UPLOAD_FOLDER'] = '.\\uploads'
+    else:
+        app.config['UPLOAD_FOLDER'] = './uploads'
+
     try:
         app.config.from_pyfile(
             os.path.join(app.config.get('CONTENT_DIR'), 'config.py')
