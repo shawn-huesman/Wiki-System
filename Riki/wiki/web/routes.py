@@ -192,7 +192,8 @@ def upload_file():
         from Riki import app
         path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
         original_name = path_and_filename
-
+        # Sample working Windows 10 filepath
+        # path_and_filename = r"C:\Users\Shawn Huesman\PycharmProjects\Wiki-System\uploads\\" + f.filename
         while os.path.exists( path_and_filename ):
             dupl_counter += 1
             txt_append = " (" + str(dupl_counter) + ")"
