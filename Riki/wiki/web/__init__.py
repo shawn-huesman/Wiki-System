@@ -30,27 +30,18 @@ def get_users():
 
 current_users = LocalProxy(get_users)
 
-
 def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
-
-    '''
-    if os.name == 'nt':
-        app.config['UPLOAD_FOLDER'] = '.\\uploads'
-    else:
-        app.config['UPLOAD_FOLDER'] = './uploads'
-    '''
 
     if platform.system() == 'Windows':
         app.config['UPLOAD_FOLDER'] = os.getcwd()+'\\uploads'
     else:
         app.config['UPLOAD_FOLDER'] = os.getcwd()+'/uploads'
 
-    print(f"os.getcwd() = {os.getcwd()}")
-
-    # app.config['UPLOAD_FOLDER'] = Path( "./uploads" )
+    if not os.path.exists( app.config['UPLOAD_FOLDER'] ):
+        os.makedirs( app.config['UPLOAD_FOLDER'] )
 
     try:
         app.config.from_pyfile(
