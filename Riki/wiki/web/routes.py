@@ -190,7 +190,18 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         from Riki import app
-        path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
+        # path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
+
+        if os.name == 'nt':
+            path_and_filename = app.config['UPLOAD_FOLDER'] + "\\" + f.filename
+        else:
+            path_and_filename = safe_join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
+
+        print(f"PLEASE COPY AND PASTE THE FOLLOWING ON DISCORD:\n")
+        print(f"secure_filename(f.filename) = {secure_filename(f.filename)} but f.filename = {f.filename}")
+        print(f"app.config['UPLOAD_FOLDER'] = {app.config['UPLOAD_FOLDER']}")
+        print(f"path_and_filename = {path_and_filename}")
+
         original_name = path_and_filename
         # Sample working Windows 10 filepath
         # path_and_filename = r"C:\Users\Shawn Huesman\PycharmProjects\Wiki-System\uploads\\" + f.filename
