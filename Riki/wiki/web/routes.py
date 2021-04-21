@@ -3,6 +3,7 @@
     ~~~~~~
 """
 import os.path
+import platform
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -201,6 +202,7 @@ def upload_file():
         print(f"secure_filename(f.filename) = {secure_filename(f.filename)} but f.filename = {f.filename}")
         print(f"app.config['UPLOAD_FOLDER'] = {app.config['UPLOAD_FOLDER']}")
         print(f"path_and_filename = {path_and_filename}")
+        print(f"Platform name = {platform.system()}\n")
 
         original_name = path_and_filename
         # Sample working Windows 10 filepath
