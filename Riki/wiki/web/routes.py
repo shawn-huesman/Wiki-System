@@ -173,6 +173,18 @@ def user_admin(user_id):
 def user_delete(user_id):
     pass
 
+@bp.route('/download/')
+def download():
+    return render_template('downloads.html')
+
+@bp.route('/download/<path:filename>', methods=['GET','POST'])
+def send_foo(filename):
+    from flask import send_from_directory
+    from Riki import app
+
+    path = app.config['UPLOAD_FOLDER']
+    return send_from_directory(path, filename, as_attachment=True)
+
 
 # Endpoint called when visiting the tab 'Upload File'
 # which later renders the 'upload.html' template.
@@ -230,7 +242,6 @@ def upload_file():
     Error Handlers
     ~~~~~~~~~~~~~~
 """
-
 
 @bp.errorhandler(404)
 def page_not_found(error):
