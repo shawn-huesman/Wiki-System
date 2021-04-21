@@ -193,8 +193,15 @@ def upload_file():
         from Riki import app
         # path_and_filename = safe_join( app.config['UPLOAD_FOLDER'], secure_filename(f.filename) )
 
+        '''
         if os.name == 'nt':
             path_and_filename = app.config['UPLOAD_FOLDER'] + "\\" + f.filename
+        else:
+            path_and_filename = safe_join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
+        '''
+
+        if platform.system() == 'Windows':
+            path_and_filename = os.path.join( app.config['UPLOAD_FOLDER'], f.filename )
         else:
             path_and_filename = safe_join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
 
@@ -202,7 +209,8 @@ def upload_file():
         print(f"secure_filename(f.filename) = {secure_filename(f.filename)} but f.filename = {f.filename}")
         print(f"app.config['UPLOAD_FOLDER'] = {app.config['UPLOAD_FOLDER']}")
         print(f"path_and_filename = {path_and_filename}")
-        print(f"Platform name = {platform.system()}\n")
+        print(f"Platform name = {platform.system()}")
+        print(f"os.path.join() = {os.path.join( app.config['UPLOAD_FOLDER'], f.filename )}\n")
 
         original_name = path_and_filename
         # Sample working Windows 10 filepath
