@@ -44,9 +44,11 @@ def create_app(directory):
     '''
 
     if platform.system() == 'Windows':
-        app.config['UPLOAD_FOLDER'] = '.\\uploads'
+        app.config['UPLOAD_FOLDER'] = os.getcwd()+'\\uploads'
     else:
-        app.config['UPLOAD_FOLDER'] = './uploads'
+        app.config['UPLOAD_FOLDER'] = os.getcwd()+'/uploads'
+
+    print(f"os.getcwd() = {os.getcwd()}")
 
     # app.config['UPLOAD_FOLDER'] = Path( "./uploads" )
 
