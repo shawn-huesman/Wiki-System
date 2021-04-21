@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title -%}
+	Download a File
+{% endblock title %}
+
+{% block content %}
+
+   <div class="container" align="left">
+        Should display all files that can be downloaded <br><br>
+        <input type="text" id="qta_field" name="file" />
+		<a href="/download/" target="blank"><button class='btn btn-default'>Download!</button></a>
+   </div>
+
+{% endblock %}
