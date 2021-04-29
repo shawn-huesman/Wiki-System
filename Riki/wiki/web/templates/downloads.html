@@ -6,10 +6,17 @@
 
 {% block content %}
 
-   <div class="container" align="left">
-        Should display all files that can be downloaded <br><br>
-        <input type="text" id="qta_field" name="file" />
-		<a href="/download/" target="blank"><button class='btn btn-default'>Download!</button></a>
-   </div>
+    <table>
+        <th style="text-align: left; font-size: large; width:300px">File Name</th>
+        <th style="text-align: left; font-size: large; width:100px">File Size</th>
+
+        {% for i in range(0, upload_file_name | length) %}
+            <tr>
+                <td style="width:300px">
+                    <a href="{{ url_for('wiki.download', filename=upload_file_name[i]) }}">{{ upload_file_name[i] }}</a></td>
+                <td style="width:100px">{{ upload_file_size[i] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

@@ -2,6 +2,8 @@
     Routes
     ~~~~~~
 """
+import math
+import os
 import os.path
 import platform
 from flask import Blueprint
@@ -174,24 +176,40 @@ def user_delete(user_id):
     pass
 
 @bp.route('/download/')
-def download():
-    return render_template('downloads.html')
-
 @bp.route('/download/<path:filename>', methods=['GET','POST'])
-def send_foo(filename):
+def download(filename=None):
     from flask import send_from_directory
     from Riki import app
 
-    path = app.config['UPLOAD_FOLDER']
-    return send_from_directory(path, filename, as_attachment=True)
+    upload_file_name = []
+    upload_file_size = []
+    upload_file_path = []
 
+    for file in os.listdir(os.getcwd() + '/uploads'):
+        upload_file_name.append(file)
+        upload_file_size.append(convert_size(os.path.getsize(os.path.join(os.getcwd() + '/uploads', file))))
+        upload_file_path.append(file)
+
+    path = app.config['UPLOAD_FOLDER']
+    if filename is not None:
+        return send_from_directory(path, filename, as_attachment=True)
+    else:
+        return render_template('downloads.html', upload_file_name=upload_file_name, upload_file_size=upload_file_size, upload_file_path=upload_file_path)
+
+def convert_size(size_bytes):
+   if size_bytes == 0:
+       return "0B"
+   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+   i = int(math.floor(math.log(size_bytes, 1024)))
+   p = math.pow(1024, i)
+   s = round(size_bytes / p, 2)
+   return "%s %s" % (s, size_name[i])
 
 # Endpoint called when visiting the tab 'Upload File'
 # which later renders the 'upload.html' template.
 @bp.route('/upload/')
 def upload():
     return render_template('upload.html')
-
 
 # Endpoint called after submitting a file to upload
 # it creates a path and filename and saves it to the folder
@@ -219,7 +237,6 @@ def upload_file():
         f.save( path_and_filename )
         flash( 'File successfully uploaded' )
         return redirect( '/upload' )
-
 
 """
     Error Handlers
