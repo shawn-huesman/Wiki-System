@@ -31,6 +31,13 @@ def get_users():
 current_users = LocalProxy(get_users)
 
 def create_app(directory):
+    '''
+    The create_app method verifies the platform on which the application
+    is accessed to configure the path for the “uploads” folder.
+
+    The create_app method verifies whether the “uploads” folder exists
+    and creates it otherwise.
+    '''
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'

@@ -205,18 +205,26 @@ def convert_size(size_bytes):
    s = round(size_bytes / p, 2)
    return "%s %s" % (s, size_name[i])
 
-# Endpoint called when visiting the tab 'Upload File'
-# which later renders the 'upload.html' template.
+
 @bp.route('/upload/')
 def upload():
+    """
+    Endpoint called when visiting the tab 'Upload File'
+    which later renders the 'upload.html' template.
+    """
     return render_template('upload.html')
 
-# Endpoint called after submitting a file to upload
-# it creates a path and filename and saves it to the folder
-# defined in app.config['UPLOAD_FOLDER'] in the init file.
-# then shows a message and redirects to /upload.
+
 @bp.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
+    """
+    Endpoint called after submitting a file to upload
+    it creates a path and filename and saves it to the folder
+    defined in app.config['UPLOAD_FOLDER'] in the init file.
+    Then shows a message and redirects to /upload.
+
+    :return: A file is uploaded to the 'uploads' folder
+    """
     dupl_counter = 0  # Variable to store count of files with the same name and append it to new uploaded file.
     if request.method == 'POST':
         f = request.files['file']
